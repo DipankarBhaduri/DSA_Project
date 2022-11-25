@@ -25,7 +25,7 @@ class calculator extends JFrame implements ActionListener {
         f = new JFrame("calculator");
 
         try {
-            // set look and feel
+            // set look and feel Create a internal graphical interface autometacally
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -35,7 +35,7 @@ class calculator extends JFrame implements ActionListener {
         calculator c = new calculator();
 
         // create a textfield
-        l = new JTextField(16);
+        l = new JTextField(18);
 
         // set the textfield to non editable
         l.setEditable(false);
@@ -111,7 +111,7 @@ class calculator extends JFrame implements ActionListener {
         p.add(beq1);
 
         // set Background of panel
-        p.setBackground(Color.blue);
+        p.setBackground(Color.CYAN);
 
         // add panel to frame
         f.add(p);
@@ -164,29 +164,6 @@ class calculator extends JFrame implements ActionListener {
             // if there was no operand
             if (s1.equals("") || s2.equals(""))
                 s1 = s;
-            // else evaluate
-            else {
-                double te;
-
-                // store the value in 1st
-                if (s1.equals("+"))
-                    te = (Double.parseDouble(s0) + Double.parseDouble(s2));
-                else if (s1.equals("-"))
-                    te = (Double.parseDouble(s0) - Double.parseDouble(s2));
-                else if (s1.equals("/"))
-                    te = (Double.parseDouble(s0) / Double.parseDouble(s2));
-                else
-                    te = (Double.parseDouble(s0) * Double.parseDouble(s2));
-
-                // convert it to string
-                s0 = Double.toString(te);
-
-                // place the operator
-                s1 = s;
-
-                // make the operand blank
-                s2 = "";
-            }
 
             // set the value of text
             l.setText(s0 + s1 + s2);
