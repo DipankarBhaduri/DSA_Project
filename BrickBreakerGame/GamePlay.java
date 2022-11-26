@@ -18,18 +18,33 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
     private int score = 0;
     private int totalbricks = 21;
     private Timer Timer;
-    private int delay = 0; // before 8
+    private int delay = 8;
+
+    // player position
     private int playerX = 310;
+
+    // Initially ball position
     private int ballposX = 120;
     private int ballposY = 350;
+
+    // Initially the ball direction we dont know so assigining the value with
+    // negative
     private int ballXdir = -1;
     private int ballYdir = -2;
     private MapGenerator map;
 
     public GamePlay() {
-        map = new MapGenerator(6, 7);
+        // initilizating the map with 3 rows and 7 colomns
+        map = new MapGenerator(3, 7);
+
+        // add keyListener whenEver pressed the key
+        // this is just call the class inside that
         addKeyListener(this);
+
+        // game should not be blurry
         setFocusable(true);
+
+        // ball smoothly traverse
         setFocusTraversalKeysEnabled(false);
         // timer delay ---> delay , this
         Timer = new Timer(delay, this);
@@ -37,16 +52,20 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
+        // whole panel painting with black
         g.setColor(Color.black);
         g.fillRect(1, 1, 692, 592);
 
+        // for the downsite bat to protect the ball
         map.draw((Graphics2D) g);
-
         g.setColor(Color.yellow);
+
+        // to maintain the bordar filling with the yellow color
         g.fillRect(0, 0, 3, 592);
         g.fillRect(0, 0, 692, 3);
         g.fillRect(691, 0, 3, 592);
 
+        // to show the score
         g.setColor(Color.white);
         g.setFont(new Font("serif", Font.BOLD, 25));
         g.drawString("" + score, 590, 30);
@@ -59,6 +78,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.GREEN);
         g.fillOval(ballposX, ballposY, 20, 20);
 
+        // when ball direction is out of the boundary
         if (ballposY > 570) {
             play = false;
             ballXdir = 0;
@@ -70,6 +90,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("serif", Font.BOLD, 30));
             g.drawString("   Press Enter to Restart", 190, 340);
         }
+        // if break all the brick
         if (totalbricks == 0) {
             play = false;
             ballYdir = -2;
@@ -92,26 +113,34 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
         Timer.start();
 
         if (play) {
+            // whenever ball hits something the ball Y-direction will be change
             if (new Rectangle(ballposX, ballposY, 20, 20).intersects(new Rectangle(playerX, 550, 100, 8))) {
                 ballYdir = -ballYdir;
             }
 
             A: for (int i = 0; i < map.map.length; i++) {
                 for (int j = 0; j < map.map[0].length; j++) {
+                    // whole map traversal done if brick is still present
                     if (map.map[i][j] > 0) {
+                        // brick size calculation
                         int brickX = j * map.bricksWidth + 80;
                         int brickY = i * map.bricksHeight + 50;
                         int bricksWidth = map.bricksWidth;
                         int bricksHeight = map.bricksHeight;
 
+                        // when ball hits with the brick
+                        // swaping part
                         Rectangle rect = new Rectangle(brickX, brickY, bricksWidth, bricksHeight);
                         Rectangle ballrect = new Rectangle(ballposX, ballposY, 20, 20);
                         Rectangle brickrect = rect;
 
+                        // set the value with zero
                         if (ballrect.intersects(brickrect)) {
                             map.setBricksValue(0, i, j);
                             totalbricks--;
                             score += 5;
+
+                            // if ball hits with brick then changing the ball direction
                             if (ballposX + 19 <= brickrect.x || ballposX + 1 >= brickrect.x + bricksWidth) {
                                 ballXdir = -ballXdir;
                             } else {
@@ -120,7 +149,6 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener {
                             break A;
                         }
                     }
-
                 }
             }
 
